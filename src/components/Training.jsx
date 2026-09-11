@@ -58,9 +58,8 @@ const Training = () => {
                 {item.details.map((detail, detailIndex) => (
                   <li
                     key={detailIndex}
-                    className="flex items-start gap-3 text-sm sm:text-base text-slate-600 leading-relaxed"
-                  >
-                    <span className="mt-2 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+                    className="flex items-start gap-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+                    <span className="mt-2 w-2 h-2 rounded-full bg-blue-500 shrink-0" />
 
                     <span>{detail}</span>
                   </li>
