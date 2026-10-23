@@ -1,76 +1,328 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 
 const Training = () => {
-  const { training } = useSelector(
-    (state) => state.portfolio
+  const training = useSelector(
+    (state) => state.portfolio?.training
   );
+
+  // Make sure training is always an array
+  const trainingList = Array.isArray(training)
+    ? training
+    : [];
 
   return (
     <section
       id="training"
-      className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 bg-white"
+      className="
+        bg-white
+        py-20
+        transition-colors
+        duration-300
+        dark:bg-slate-900
+      "
     >
-      <div className="max-w-5xl mx-auto">
+      <div className="mx-auto max-w-6xl px-6">
 
-        {/* Heading */}
-        <div className="animate-fade-up text-center mb-10 sm:mb-12">
-          <p className="text-blue-600 font-semibold text-sm uppercase tracking-widest mb-2">
-            Experience
+        {/* ================= SECTION HEADER ================= */}
+        <div className="mb-12 text-center">
+          <p
+            className="
+              mb-2
+              text-sm
+              font-semibold
+              uppercase
+              tracking-[0.25em]
+              text-blue-600
+              dark:text-blue-400
+            "
+          >
+            Learning
           </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900">
-            Training & Experience
+          <h2
+            className="
+              text-3xl
+              font-bold
+              text-slate-900
+              dark:text-white
+              sm:text-4xl
+            "
+          >
+            Training & Certifications
           </h2>
+
+          <p
+            className="
+              mx-auto
+              mt-4
+              max-w-2xl
+              text-base
+              leading-7
+              text-slate-600
+              dark:text-slate-400
+            "
+          >
+            My professional training and practical learning
+            experience in web development and modern
+            frontend technologies.
+          </p>
         </div>
 
-        {/* Timeline */}
-        <div className="space-y-6 sm:space-y-8">
+        {/* ================= TRAINING LIST ================= */}
+        {trainingList.length > 0 ? (
+          <div className="grid gap-7 md:grid-cols-2">
+            {trainingList.map((item, index) => (
+              <article
+                key={item?.id || index}
+                className="
+                  group
+                  flex
+                  flex-col
+                  rounded-2xl
+                  border
+                  border-slate-200
+                  bg-slate-50
+                  p-7
+                  shadow-sm
 
-          {training.map((item, index) => (
-            <article
-              key={item.id}
-              style={{
-                animationDelay: `${150 + index * 150}ms`,
-              }}
-              className="animate-slide-left p-5 sm:p-6 lg:p-7 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-blue-200 transition-all duration-500 ease-out"
-            >
+                  transition-all
+                  duration-300
 
-              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 mb-5">
+                  hover:-translate-y-1
+                  hover:border-blue-400
+                  hover:shadow-lg
+                  hover:shadow-blue-500/10
 
-                <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-                    {item.role}
-                  </h3>
+                  dark:border-slate-700
+                  dark:bg-slate-800
 
-                  <p className="mt-1 text-blue-600 font-semibold">
-                    {item.institution}
-                  </p>
+                  dark:hover:border-blue-500
+                  dark:hover:shadow-blue-500/10
+                "
+              >
+                {/* ================= CARD TOP ================= */}
+                <div
+                  className="
+                    flex
+                    flex-col
+                    gap-5
+                    sm:flex-row
+                    sm:items-start
+                    sm:justify-between
+                  "
+                >
+                  {/* Icon + Information */}
+                  <div className="flex gap-4">
+
+                    {/* Training Icon */}
+                    <div
+                      className="
+                        flex
+                        h-14
+                        w-14
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        bg-blue-50
+                        text-2xl
+
+                        dark:bg-blue-500/10
+                      "
+                    >
+                      🎓
+                    </div>
+
+                    {/* Training Information */}
+                    <div>
+                      <h3
+                        className="
+                          text-lg
+                          font-bold
+                          leading-7
+                          text-slate-900
+                          transition-colors
+                          duration-300
+
+                          group-hover:text-blue-600
+
+                          dark:text-white
+                          dark:group-hover:text-blue-400
+
+                          sm:text-xl
+                        "
+                      >
+                        {item?.role ||
+                          "Training Program"}
+                      </h3>
+
+                      {/* Institution */}
+                      {item?.institution && (
+                        <p
+                          className="
+                            mt-2
+                            font-semibold
+                            text-blue-600
+                            dark:text-blue-400
+                          "
+                        >
+                          {item.institution}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ================= PERIOD ================= */}
+                  {item?.period && (
+                    <span
+                      className="
+                        w-fit
+                        shrink-0
+                        whitespace-nowrap
+                        rounded-full
+                        bg-blue-50
+                        px-3
+                        py-1.5
+                        text-xs
+                        font-semibold
+                        text-blue-600
+
+                        dark:bg-blue-500/10
+                        dark:text-blue-400
+                      "
+                    >
+                      {item.period}
+                    </span>
+                  )}
                 </div>
 
-                <span className="self-start px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-semibold whitespace-nowrap">
-                  {item.period}
-                </span>
+                {/* ================= DETAILS ================= */}
+                {Array.isArray(item?.details) &&
+                  item.details.length > 0 && (
+                    <div className="mt-7">
 
-              </div>
+                      <div
+                        className="
+                          mb-4
+                          flex
+                          items-center
+                          gap-2
+                        "
+                      >
+                        <span
+                          className="
+                            h-1.5
+                            w-1.5
+                            rounded-full
+                            bg-blue-600
+                            dark:bg-blue-400
+                          "
+                        />
 
-              <ul className="space-y-3">
-                {item.details.map((detail, detailIndex) => (
-                  <li
-                    key={detailIndex}
-                    className="flex items-start gap-3 text-sm sm:text-base text-slate-600 leading-relaxed">
-                    <span className="mt-2 w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                        <h4
+                          className="
+                            text-sm
+                            font-bold
+                            uppercase
+                            tracking-wider
+                            text-slate-700
+                            dark:text-slate-300
+                          "
+                        >
+                          What I Learned
+                        </h4>
+                      </div>
 
-                    <span>{detail}</span>
-                  </li>
-                ))}
-              </ul>
+                      <ul className="space-y-3">
+                        {item.details.map(
+                          (detail, detailIndex) => (
+                            <li
+                              key={detailIndex}
+                              className="
+                                flex
+                                items-start
+                                gap-3
+                                text-sm
+                                leading-7
+                                text-slate-600
+                                dark:text-slate-300
+                              "
+                            >
+                              {/* Bullet */}
+                              <span
+                                className="
+                                  mt-2.5
+                                  h-2
+                                  w-2
+                                  shrink-0
+                                  rounded-full
+                                  bg-blue-600
+                                  dark:bg-blue-400
+                                "
+                                aria-hidden="true"
+                              />
 
-            </article>
-          ))}
+                              <span>
+                                {detail}
+                              </span>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
+              </article>
+            ))}
+          </div>
+        ) : (
+          /* ================= EMPTY STATE ================= */
+          <div
+            className="
+              rounded-2xl
+              border
+              border-dashed
+              border-slate-300
+              bg-slate-50
+              px-6
+              py-14
+              text-center
 
-        </div>
+              dark:border-slate-700
+              dark:bg-slate-800
+            "
+          >
+            <div className="mb-4 text-5xl">
+              🎓
+            </div>
 
+            <h3
+              className="
+                text-xl
+                font-bold
+                text-slate-900
+                dark:text-white
+              "
+            >
+              No training information
+            </h3>
+
+            <p
+              className="
+                mx-auto
+                mt-2
+                max-w-md
+                text-sm
+                leading-6
+                text-slate-500
+                dark:text-slate-400
+              "
+            >
+              Training and certification information
+              is currently unavailable.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

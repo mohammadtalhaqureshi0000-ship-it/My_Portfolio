@@ -1,5 +1,15 @@
-
 @import "tailwindcss";
+
+/* ========================================
+   Tailwind CSS v4 - Dark Mode
+   ======================================== */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+/* ========================================
+   Base Styles
+   ======================================== */
 
 html {
   scroll-behavior: smooth;
@@ -8,16 +18,81 @@ html {
 
 body {
   margin: 0;
+  min-width: 320px;
   overflow-x: hidden;
+
+  background-color: #f1f5f9;
+  color: #0f172a;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
 }
 
-/* Smooth selection */
+
+/* ========================================
+   Dark Mode Base
+   ======================================== */
+
+html.dark body {
+  background-color: #020617;
+  color: #f8fafc;
+}
+
+
+/* ========================================
+   Selection
+   ======================================== */
+
 ::selection {
-  background: #2563eb;
-  color: white;
+  background-color: #2563eb;
+  color: #ffffff;
 }
 
-/* Custom reveal animation */
+
+/* ========================================
+   Smooth Image Rendering
+   ======================================== */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* ========================================
+   Links
+   ======================================== */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+button {
+  font: inherit;
+}
+
+
+/* ========================================
+   Fade Up Animation
+   ======================================== */
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -34,7 +109,11 @@ body {
   animation: fadeUp 0.8s ease-out both;
 }
 
-/* Slight fade */
+
+/* ========================================
+   Fade In Animation
+   ======================================== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -49,7 +128,11 @@ body {
   animation: fadeIn 1s ease-out both;
 }
 
-/* Slide from left */
+
+/* ========================================
+   Slide Left Animation
+   ======================================== */
+
 @keyframes slideLeft {
   from {
     opacity: 0;
@@ -66,7 +149,11 @@ body {
   animation: slideLeft 0.8s ease-out both;
 }
 
-/* Slide from right */
+
+/* ========================================
+   Slide Right Animation
+   ======================================== */
+
 @keyframes slideRight {
   from {
     opacity: 0;
@@ -83,7 +170,120 @@ body {
   animation: slideRight 0.8s ease-out both;
 }
 
-/* Respect reduced motion preferences */
+
+/* ========================================
+   Scale In Animation
+   ======================================== */
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out both;
+}
+
+
+/* ========================================
+   Floating Animation
+   ======================================== */
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+
+/* ========================================
+   Cursor Blinking
+   ======================================== */
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+
+
+/* ========================================
+   Custom Scrollbar
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+
+/* Dark Scrollbar */
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+
+/* ========================================
+   Focus Accessibility
+   ======================================== */
+
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

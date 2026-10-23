@@ -1,99 +1,158 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 
-const Contact = () => {
-  const { email, phone, location } = useSelector(
-    (state) => state.portfolio.profile
+const Contect = () => {
+  const profile = useSelector(
+    (state) => state.portfolio?.profile
   );
 
   const contactItems = [
     {
-      label: 'Email',
-      value: email,
-      href: `mailto:${email}`,
-      icon: '✉',
+      icon: "✉️",
+      label: "Email",
+      value: profile?.email,
+      href: profile?.email
+        ? `mailto:${profile.email}`
+        : null,
     },
     {
-      label: 'Phone',
-      value: phone,
-      href: `tel:${phone}`,
-      icon: '☎',
+      icon: "📱",
+      label: "Phone",
+      value: profile?.phone,
+      href: profile?.phone
+        ? `tel:${profile.phone}`
+        : null,
     },
     {
-      label: 'Location',
-      value: location,
-      href: '#contact',
-      icon: '📍',
+      icon: "📍",
+      label: "Location",
+      value: profile?.location,
+      href: null,
     },
   ];
 
   return (
     <section
       id="contact"
-      className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 bg-slate-950 text-white"
+      className="
+        bg-slate-100
+        py-16
+        transition-colors
+        duration-300
+        dark:bg-slate-950
+      "
     >
-      <div className="max-w-5xl mx-auto">
-
+      <div className="mx-auto max-w-6xl px-6">
         {/* Heading */}
-        <div className="animate-fade-up text-center mb-10 sm:mb-12">
-          <p className="text-blue-400 font-semibold text-sm uppercase tracking-widest mb-2">
+        <div className="mb-10 text-center">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">
             Get In Touch
           </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">
             Contact Me
           </h2>
 
-          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-400 leading-relaxed">
-            Have a project, opportunity, or just want to connect?
-            Feel free to reach out.
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-400">
+            Have a project or opportunity in mind? Feel free
+            to get in touch with me.
           </p>
         </div>
 
         {/* Contact Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
-
-          {contactItems.map((item, index) => (
-            <a
-              key={item.label}
-              href={item.href}
-              style={{
-                animationDelay: `${150 + index * 100}ms`,
-              }}
-              className="animate-fade-up group p-5 sm:p-6 bg-slate-900 border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-slate-800 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-500 ease-out"
-            >
-
-              <div className="flex flex-col items-center text-center">
-
-                <div className="w-12 h-12 mb-4 rounded-xl bg-blue-500/10 flex items-center justify-center text-xl group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-300">
+        <div className="grid gap-4 md:grid-cols-3">
+          {contactItems.map((item) => {
+            const cardContent = (
+              <>
+                <div
+                  className="
+                    flex
+                    h-11
+                    w-11
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-blue-50
+                    text-lg
+                    transition-all
+                    duration-300
+                    group-hover:bg-blue-100
+                    dark:bg-blue-500/10
+                    dark:group-hover:bg-blue-500/20
+                  "
+                >
                   {item.icon}
                 </div>
 
-                <h3 className="font-bold text-white mb-2 group-hover:text-blue-400 transition-colors duration-300">
-                  {item.label}
-                </h3>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    {item.label}
+                  </p>
 
-                <p className="text-sm text-slate-400 break-all">
-                  {item.value}
-                </p>
+                  <p className="mt-1 break-words text-sm font-semibold text-slate-900 dark:text-white">
+                    {item.value || "Not available"}
+                  </p>
+                </div>
+              </>
+            );
 
+            const cardClassName = `
+              group
+              flex
+              items-center
+              gap-4
+              rounded-2xl
+              border
+              border-slate-200
+              bg-white
+              p-5
+              shadow-sm
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:border-blue-400
+              hover:shadow-lg
+              hover:shadow-blue-500/10
+              dark:border-slate-700
+              dark:bg-slate-900
+              dark:hover:border-blue-500
+              dark:hover:shadow-blue-500/10
+            `;
+
+            if (item.href) {
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={cardClassName}
+                >
+                  {cardContent}
+                </a>
+              );
+            }
+
+            return (
+              <div
+                key={item.label}
+                className={cardClassName}
+              >
+                {cardContent}
               </div>
-
-            </a>
-          ))}
-
+            );
+          })}
         </div>
 
-        {/* Footer */}
-        <div className="animate-fade-in [animation-delay:500ms] mt-12 pt-8 border-t border-slate-800 text-center">
-          <p className="text-sm text-slate-500">
-            © {new Date().getFullYear()} Muhammad Talha. All rights reserved.
+        {/* Bottom Message */}
+        <div className="mt-8 text-center">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            I'm always open to discussing new projects,
+            ideas, and opportunities.
           </p>
         </div>
-
       </div>
     </section>
   );
 };
 
-export default Contact;
+export default Contect;

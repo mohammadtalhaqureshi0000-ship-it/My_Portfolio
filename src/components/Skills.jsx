@@ -1,114 +1,322 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  setSkillFilter,
-} from '../features/portfolio/portfolioSlice';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSkillFilter } from "../features/portfolio/portfolioSlice";
 
 const Skills = () => {
   const dispatch = useDispatch();
 
   const {
-    skills,
-    activeSkillFilter,
+    skills = {},
+    activeSkillFilter = "All",
   } = useSelector((state) => state.portfolio);
 
   const categories = [
-    'All',
-    'coreFrontend',
-    'stateManagement',
-    'backendDatabase',
+    {
+      label: "All",
+      value: "All",
+    },
+    {
+      label: "Core Frontend",
+      value: "coreFrontend",
+    },
+    {
+      label: "State Management",
+      value: "stateManagement",
+    },
+    {
+      label: "Backend & Database",
+      value: "backendDatabase",
+    },
   ];
 
-  const categoryLabels = {
-    All: 'All Skills',
-    coreFrontend: 'Core Frontend',
-    stateManagement: 'State Management',
-    backendDatabase: 'Backend & Database',
-  };
+  // Convert your Redux skills object into one array
+  const allSkills = [
+    ...(Array.isArray(skills.coreFrontend)
+      ? skills.coreFrontend.map((skill) => ({
+          name: skill,
+          category: "coreFrontend",
+        }))
+      : []),
 
-  const getSkills = () => {
-    if (activeSkillFilter === 'All') {
-      return [
-        ...skills.coreFrontend,
-        ...skills.stateManagement,
-        ...skills.backendDatabase,
-      ];
-    }
+    ...(Array.isArray(skills.stateManagement)
+      ? skills.stateManagement.map((skill) => ({
+          name: skill,
+          category: "stateManagement",
+        }))
+      : []),
 
-    return skills[activeSkillFilter] || [];
-  };
+    ...(Array.isArray(skills.backendDatabase)
+      ? skills.backendDatabase.map((skill) => ({
+          name: skill,
+          category: "backendDatabase",
+        }))
+      : []),
+  ];
 
-  const filteredSkills = getSkills();
+  // Filter skills
+  const filteredSkills =
+    activeSkillFilter === "All"
+      ? allSkills
+      : allSkills.filter(
+          (skill) => skill.category === activeSkillFilter
+        );
 
   return (
     <section
       id="skills"
-      className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 bg-slate-50"
+      className="
+        bg-slate-100
+        py-20
+        transition-colors
+        duration-300
+        dark:bg-slate-950
+      "
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto max-w-6xl px-6">
 
-        {/* Heading */}
-        <div className="animate-fade-up text-center mb-10 sm:mb-12">
-          <p className="text-blue-600 font-semibold text-sm uppercase tracking-widest mb-2">
-            What I Know
+        {/* Section Heading */}
+        <div className="mb-12 text-center">
+          <p
+            className="
+              mb-2
+              text-sm
+              font-semibold
+              uppercase
+              tracking-[0.25em]
+              text-blue-600
+              dark:text-blue-400
+            "
+          >
+            Technologies
           </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900">
-            Skills & Technologies
+          <h2
+            className="
+              text-3xl
+              font-bold
+              text-slate-900
+              dark:text-white
+              sm:text-4xl
+            "
+          >
+            My Skills
           </h2>
+
+          <p
+            className="
+              mx-auto
+              mt-4
+              max-w-2xl
+              leading-7
+              text-slate-600
+              dark:text-slate-400
+            "
+          >
+            Technologies and tools I use to build modern,
+            responsive, and user-friendly applications.
+          </p>
         </div>
 
-        {/* Filters */}
-        <div className="animate-fade-up [animation-delay:100ms] flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
+        {/* Category Buttons */}
+        <div className="mb-10 flex flex-wrap justify-center gap-3">
           {categories.map((category) => {
             const isActive =
-              activeSkillFilter === category;
+              activeSkillFilter === category.value;
 
             return (
               <button
-                key={category}
+                key={category.value}
+                type="button"
                 onClick={() =>
-                  dispatch(setSkillFilter(category))
+                  dispatch(
+                    setSkillFilter(category.value)
+                  )
                 }
                 className={`
-                  px-4 sm:px-5 py-2 rounded-full
-                  text-sm font-semibold
-                  transition-all duration-300 ease-out
-                  hover:-translate-y-0.5
+                  rounded-xl
+                  border
+                  px-4
+                  py-2
+                  text-sm
+                  font-semibold
+                  transition-all
+                  duration-300
+
                   ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:border-blue-300 hover:text-blue-600'
+                      ? `
+                        border-blue-600
+                        bg-blue-600
+                        text-white
+                        shadow-md
+                        shadow-blue-600/20
+                      `
+                      : `
+                        border-slate-300
+                        bg-white
+                        text-slate-700
+
+                        hover:-translate-y-0.5
+                        hover:border-blue-400
+                        hover:text-blue-600
+                        hover:shadow-sm
+
+                        dark:border-slate-700
+                        dark:bg-slate-900
+                        dark:text-slate-300
+
+                        dark:hover:border-blue-500
+                        dark:hover:text-blue-400
+                      `
                   }
                 `}
               >
-                {categoryLabels[category]}
+                {category.label}
               </button>
             );
           })}
         </div>
 
-        {/* Skills */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {filteredSkills.map((skill, index) => (
-            <div
-              key={`${skill}-${index}`}
-              style={{
-                animationDelay: `${150 + index * 70}ms`,
-              }}
-              className="animate-fade-up group bg-white border border-slate-200 rounded-xl px-4 sm:px-6 py-4 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-300 transition-all duration-300 ease-out"
-            >
-              <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500 group-hover:scale-125 transition-transform duration-300" />
+        {/* Skills Grid */}
+        {filteredSkills.length > 0 ? (
+          <div
+            className="
+              grid
+              gap-5
+              sm:grid-cols-2
+              lg:grid-cols-3
+          "
+          >
+            {filteredSkills.map((skill, index) => (
+              <div
+                key={`${skill.category}-${index}`}
+                className="
+                  group
+                  rounded-2xl
+                  border
+                  border-slate-200
+                  bg-white
+                  p-6
+                  shadow-sm
 
-                <span className="text-sm sm:text-base font-semibold text-slate-700 group-hover:text-blue-600 transition-colors duration-300">
-                  {skill}
-                </span>
+                  transition-all
+                  duration-300
+
+                  hover:-translate-y-1
+                  hover:border-blue-400
+                  hover:shadow-lg
+                  hover:shadow-blue-500/10
+
+                  dark:border-slate-700
+                  dark:bg-slate-900
+
+                  dark:hover:border-blue-500
+                  dark:hover:shadow-blue-500/10
+                "
+              >
+                <div className="flex items-center gap-4">
+
+                  {/* Icon */}
+                  <div
+                    className="
+                      flex
+                      h-12
+                      w-12
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-xl
+                      bg-blue-50
+                      text-xl
+
+                      dark:bg-blue-500/10
+                    "
+                  >
+                    💻
+                  </div>
+
+                  {/* Skill Info */}
+                  <div>
+                    <h3
+                      className="
+                        font-bold
+                        text-slate-900
+                        transition-colors
+                        duration-300
+                        group-hover:text-blue-600
+
+                        dark:text-white
+                        dark:group-hover:text-blue-400
+                      "
+                    >
+                      {skill.name}
+                    </h3>
+
+                    <p
+                      className="
+                        mt-1
+                        text-xs
+                        font-medium
+                        text-slate-500
+                        dark:text-slate-400
+                      "
+                    >
+                      {skill.category === "coreFrontend"
+                        ? "Core Frontend"
+                        : skill.category ===
+                            "stateManagement"
+                          ? "State Management"
+                          : "Backend & Database"}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          /* Empty State */
+          <div
+            className="
+              rounded-2xl
+              border
+              border-dashed
+              border-slate-300
+              bg-white
+              px-6
+              py-12
+              text-center
 
+              dark:border-slate-700
+              dark:bg-slate-900
+            "
+          >
+            <div className="mb-3 text-4xl">
+              🛠️
+            </div>
+
+            <h3
+              className="
+                text-lg
+                font-bold
+                text-slate-900
+                dark:text-white
+              "
+            >
+              No skills found
+            </h3>
+
+            <p
+              className="
+                mt-2
+                text-sm
+                text-slate-500
+                dark:text-slate-400
+              "
+            >
+              No skills are available in this category.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

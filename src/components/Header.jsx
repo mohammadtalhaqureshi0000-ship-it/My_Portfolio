@@ -1,461 +1,713 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Typewriter from "./Typewriter";
-import myprofilepicture from "../assets/myprofilepicture.jpeg";
+import profileImage from "../assets/myprofilepicture.jpeg";
 
 const Hero = () => {
-  const { profile } = useSelector((state) => state.portfolio);
+  const profile = useSelector(
+    (state) => state.portfolio?.profile
+  );
 
   const [mousePosition, setMousePosition] = useState({
     x: 0,
     y: 0,
   });
 
-  const [reducedMotion, setReducedMotion] = useState(false);
-
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    );
-
-    const handleMotionChange = () => {
-      setReducedMotion(mediaQuery.matches);
-    };
-
-    handleMotionChange();
-
-    mediaQuery.addEventListener("change", handleMotionChange);
-
-    return () => {
-      mediaQuery.removeEventListener(
-        "change",
-        handleMotionChange
-      );
-    };
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      return;
-    }
-
     const handleMouseMove = (event) => {
       const x =
-        (event.clientX / window.innerWidth - 0.5) * 2;
+        (event.clientX / window.innerWidth - 0.5) * 20;
 
       const y =
-        (event.clientY / window.innerHeight - 0.5) * 2;
+        (event.clientY / window.innerHeight - 0.5) * 20;
 
-      setMousePosition({
-        x,
-        y,
-      });
+      setMousePosition({ x, y });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      window.removeEventListener(
-        "mousemove",
-        handleMouseMove
-      );
+      window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [reducedMotion]);
-
-  const photoX = reducedMotion
-    ? 0
-    : mousePosition.x * -15;
-
-  const photoY = reducedMotion
-    ? 0
-    : mousePosition.y * -15;
-
-  const rotateX = reducedMotion
-    ? 0
-    : mousePosition.y * 5;
-
-  const rotateY = reducedMotion
-    ? 0
-    : mousePosition.x * -5;
+  }, []);
 
   return (
     <section
       id="home"
       className="
-        min-h-[calc(100vh-80px)]
-        flex
-        items-center
-        bg-slate-950
-        text-white
-        px-4
-        sm:px-6
-        lg:px-8
-        py-16
-        sm:py-20
-        lg:py-24
+        relative
+        min-h-screen
         overflow-hidden
+        bg-slate-100
+        text-slate-900
+        transition-colors
+        duration-300
+        dark:bg-slate-950
+        dark:text-white
       "
     >
+      {/* Background Decoration */}
       <div
-        className="
-          max-w-6xl
-          mx-auto
-          w-full
-          flex
-          flex-col-reverse
-          lg:flex-row
-          items-center
-          justify-between
-          gap-12
-          lg:gap-16
-        "
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        aria-hidden="true"
       >
-        <div className="w-full lg:w-2/3">
-          <div className="animate-fade-up mb-6">
-            <span
-              className="
-                inline-flex
-                items-center
-                gap-2
-                px-4
-                py-2
-                rounded-full
-                bg-blue-500/10
-                border
-                border-blue-500/30
-                text-blue-400
-                text-sm
-                font-medium
-              "
-            >
-              <span
-                className="
-                  w-2
-                  h-2
-                  bg-green-400
-                  rounded-full
-                  animate-pulse
-                "
-              />
-
-              Available for opportunities
-            </span>
-          </div>
-
-          <h1
-            className="
-              animate-fade-up
-              text-4xl
-              sm:text-5xl
-              md:text-6xl
-              lg:text-7xl
-              font-black
-              tracking-tight
-              leading-tight
-              mb-6
-            "
-          >
-            Hi, I'm{" "}
-
-            <span className="text-blue-400">
-              <Typewriter
-                text={profile?.name || "Your Name"}
-                speed={100}
-                delay={500}
-              />
-            </span>
-          </h1>
-
-          <h2
-            className="
-              animate-fade-up
-              [animation-delay:200ms]
-              text-xl
-              sm:text-2xl
-              md:text-3xl
-              font-bold
-              text-slate-300
-              mb-6
-            "
-          >
-            <Typewriter
-              text="Frontend / React Developer"
-              speed={70}
-              delay={1800}
-            />
-          </h2>
-
-          <p
-            className="
-              animate-fade-up
-              [animation-delay:300ms]
-              max-w-3xl
-              text-base
-              sm:text-lg
-              md:text-xl
-              leading-relaxed
-              text-slate-400
-              mb-8
-            "
-          >
-            <Typewriter
-              text={
-                profile?.summary ||
-                "I build modern, responsive, and user-friendly web applications using React and modern web technologies."
-              }
-              speed={25}
-              delay={3500}
-            />
-          </p>
-
-          <div
-            className="
-              animate-fade-up
-              [animation-delay:400ms]
-              flex
-              flex-col
-              sm:flex-row
-              sm:flex-wrap
-              gap-4
-              sm:gap-6
-              text-sm
-              sm:text-base
-              text-slate-300
-            "
-          >
-            {profile?.email && (
-              <a
-                href={`mailto:${profile.email}`}
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  hover:text-blue-400
-                  transition-colors
-                  duration-300
-                "
-              >
-                <span className="text-blue-400">
-                  ✉
-                </span>
-
-                <span className="break-all">
-                  {profile.email}
-                </span>
-              </a>
-            )}
-
-            {profile?.phone && (
-              <a
-                href={`tel:${profile.phone}`}
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  hover:text-blue-400
-                  transition-colors
-                  duration-300
-                "
-              >
-                <span className="text-blue-400">
-                  ☎
-                </span>
-
-                {profile.phone}
-              </a>
-            )}
-
-            {profile?.location && (
-              <span className="flex items-center gap-2">
-                <span className="text-blue-400">
-                  📍
-                </span>
-
-                {profile.location}
-              </span>
-            )}
-          </div>
-
-          <div
-            className="
-              animate-fade-up
-              [animation-delay:500ms]
-              mt-10
-              flex
-              flex-col
-              sm:flex-row
-              gap-4
-            "
-          >
-            <a
-              href="#projects"
-              className="
-                inline-flex
-                justify-center
-                items-center
-                px-6
-                py-3
-                rounded-xl
-                bg-blue-600
-                text-white
-                font-semibold
-                hover:bg-blue-500
-                hover:-translate-y-1
-                hover:shadow-lg
-                hover:shadow-blue-500/20
-                transition-all
-                duration-300
-              "
-            >
-              View My Projects
-            </a>
-
-            <a
-              href="#contact"
-              className="
-                inline-flex
-                justify-center
-                items-center
-                px-6
-                py-3
-                rounded-xl
-                border
-                border-slate-700
-                text-slate-200
-                font-semibold
-                hover:border-blue-500
-                hover:text-blue-400
-                hover:-translate-y-1
-                transition-all
-                duration-300
-              "
-            >
-              Contact Me
-            </a>
-          </div>
-        </div>
+        <div
+          className="
+            absolute
+            -right-32
+            -top-32
+            h-80
+            w-80
+            rounded-full
+            bg-blue-500/10
+            blur-3xl
+            sm:h-96
+            sm:w-96
+          "
+        />
 
         <div
           className="
-            animate-scale-in
-            w-full
-            lg:w-1/3
-            flex
-            justify-center
-            lg:justify-end
-            [perspective:1000px]
+            absolute
+            -bottom-32
+            -left-32
+            h-80
+            w-80
+            rounded-full
+            bg-cyan-500/10
+            blur-3xl
+            sm:h-96
+            sm:w-96
           "
-        >
+        />
+      </div>
+
+      {/* Main Container */}
+      <div
+        className="
+          relative
+          mx-auto
+          max-w-7xl
+          px-5
+          py-24
+          sm:px-8
+          lg:px-8
+        "
+      >
+        {/* ================= MOBILE / TABLET ================= */}
+        <div className="flex flex-col items-center lg:hidden">
+
+          {/* Name */}
+          <div className="order-1 text-center animate-slide-left">
+            <p
+              className="
+                mb-4
+                text-sm
+                font-semibold
+                uppercase
+                tracking-[0.25em]
+                text-blue-600
+                dark:text-blue-400
+              "
+            >
+              Welcome to my portfolio
+            </p>
+
+            <h1
+              className="
+                text-4xl
+                font-bold
+                leading-tight
+                tracking-tight
+                text-slate-900
+                dark:text-white
+                sm:text-5xl
+              "
+            >
+              Hi, I'm{" "}
+              <span className="text-blue-600 dark:text-blue-400">
+                <Typewriter
+                  text={profile?.name || "Muhammad Talha"}
+                  speed={100}
+                  delay={300}
+                />
+              </span>
+            </h1>
+          </div>
+
+          {/* Profile Image */}
           <div
             className="
-              relative
-              w-64
-              h-64
-              sm:w-72
-              sm:h-72
-              lg:w-80
-              lg:h-80
-              transition-transform
-              duration-300
-              ease-out
+              order-2
+              mt-10
+              flex
+              justify-center
             "
-            style={{
-              transform: `
-                translate3d(
-                  ${photoX}px,
-                  ${photoY}px,
-                  0
-                )
-                rotateX(${rotateX}deg)
-                rotateY(${rotateY}deg)
-              `,
-            }}
           >
             <div
               className="
-                absolute
-                inset-0
-                rounded-full
-                bg-blue-500/20
-                blur-3xl
-                scale-110
-                animate-pulse
+                animate-fade-in
+                transition-transform
+                duration-300
+                ease-out
               "
-            />
+              style={{
+                transform: `translate(
+                  ${mousePosition.x}px,
+                  ${mousePosition.y}px
+                )`,
+              }}
+            >
+              <div
+                className="
+                  relative
+                  h-60
+                  w-60
+                  rounded-full
+                  border-8
+                  border-white
+                  bg-slate-200
+                  p-2
+                  shadow-2xl
+                  dark:border-slate-800
+                  dark:bg-slate-800
+                  sm:h-72
+                  sm:w-72
+                  md:h-80
+                  md:w-80
+                "
+              >
+                <img
+                  src={profileImage}
+                  alt={
+                    profile?.name
+                      ? `${profile.name} profile photo`
+                      : "Profile photo"
+                  }
+                  className="
+                    h-full
+                    w-full
+                    rounded-full
+                    object-cover
+                  "
+                />
 
+                {/* Available Badge */}
+                <div
+                  className="
+                    absolute
+                    -bottom-3
+                    -right-3
+                    flex
+                    items-center
+                    gap-2
+                    rounded-2xl
+                    bg-blue-600
+                    px-4
+                    py-2
+                    text-sm
+                    font-bold
+                    text-white
+                    shadow-lg
+                    shadow-blue-600/20
+                  "
+                >
+                  <span
+                    className="
+                      h-2
+                      w-2
+                      rounded-full
+                      bg-green-400
+                    "
+                    aria-hidden="true"
+                  />
+
+                  Available
+                </div>
+
+                {/* Decorative Ring */}
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    -inset-4
+                    -z-10
+                    rounded-full
+                    border
+                    border-blue-500/20
+                  "
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Intro */}
+          <div
+            className="
+              order-3
+              mt-12
+              w-full
+              max-w-3xl
+              text-center
+            "
+          >
+            {/* Job Title */}
             <div
               className="
-                absolute
-                -inset-3
-                rounded-full
-                border
-                border-blue-500/20
-              "
-            />
-
-            <div
-              className="
-                relative
-                w-full
-                h-full
-                rounded-full
-                p-1
-                bg-gradient-to-br
-                from-blue-500
-                via-blue-400
-                to-cyan-400
-                shadow-2xl
-                shadow-blue-500/20
+                min-h-[45px]
+                text-2xl
+                font-semibold
+                text-slate-700
+                dark:text-slate-300
+                sm:text-3xl
               "
             >
-              <img
-                src={myprofilepicture}
-                alt={profile?.name || "Profile"}
-                className="
-                  w-full
-                  h-full
-                  object-cover
-                  rounded-full
-                  border-4
-                  border-slate-950
-                  transition-transform
-                  duration-500
-                  hover:scale-105
-                "
+              <Typewriter
+                text={
+                  profile?.title ||
+                  "Frontend Developer"
+                }
+                speed={70}
+                delay={1500}
               />
             </div>
 
-            <span
+            {/* Summary */}
+            <p
               className="
-                absolute
-                -top-2
-                right-8
-                w-4
-                h-4
-                rounded-full
-                bg-blue-400
-                shadow-lg
-                shadow-blue-400/50
-                animate-pulse
+                mt-6
+                text-base
+                leading-8
+                text-slate-600
+                dark:text-slate-400
+                sm:text-lg
               "
-            />
+            >
+              {profile?.summary ||
+                "I build modern, responsive and user-friendly web applications using modern frontend technologies."}
+            </p>
 
-            <span
+            {/* Location */}
+            {profile?.location && (
+              <div
+                className="
+                  mt-5
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
+                  text-sm
+                  font-medium
+                  text-slate-500
+                  dark:text-slate-400
+                "
+              >
+                <span aria-hidden="true">📍</span>
+                <span>{profile.location}</span>
+              </div>
+            )}
+
+            {/* Buttons */}
+            <div
               className="
-                absolute
-                bottom-6
-                -left-4
-                w-3
-                h-3
-                rounded-full
-                bg-cyan-400
-                shadow-lg
-                shadow-cyan-400/50
-                animate-pulse
+                mt-8
+                flex
+                flex-wrap
+                justify-center
+                gap-4
               "
-            />
+            >
+              <a
+                href="#projects"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  bg-blue-600
+                  px-6
+                  py-3
+                  font-semibold
+                  text-white
+                  shadow-lg
+                  shadow-blue-600/20
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:bg-blue-700
+                "
+              >
+                View Projects
+                <span aria-hidden="true">↗</span>
+              </a>
+
+              <a
+                href="#contact"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  border
+                  border-slate-300
+                  bg-white
+                  px-6
+                  py-3
+                  font-semibold
+                  text-slate-800
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:border-blue-400
+                  hover:text-blue-600
+                  dark:border-slate-700
+                  dark:bg-slate-900
+                  dark:text-slate-200
+                  dark:hover:border-blue-500
+                  dark:hover:text-blue-400
+                "
+              >
+                Contact Me
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            {/* Contact Information */}
+            <div
+              className="
+                mt-8
+                flex
+                flex-wrap
+                justify-center
+                gap-x-6
+                gap-y-3
+                text-sm
+                text-slate-500
+                dark:text-slate-400
+              "
+            >
+              {profile?.email && (
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  {profile.email}
+                </a>
+              )}
+
+              {profile?.phone && (
+                <a
+                  href={`tel:${profile.phone}`}
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  {profile.phone}
+                </a>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* ================= DESKTOP ================= */}
+        <div
+          className="
+            hidden
+            min-h-[calc(100vh-12rem)]
+            items-center
+            gap-12
+            lg:grid
+            lg:grid-cols-2
+          "
+        >
+          {/* Desktop Left */}
+          <div className="animate-slide-left">
+
+            <p
+              className="
+                mb-4
+                text-sm
+                font-semibold
+                uppercase
+                tracking-[0.3em]
+                text-blue-600
+                dark:text-blue-400
+              "
+            >
+              Welcome to my portfolio
+            </p>
+
+            <h1
+              className="
+                text-4xl
+                font-bold
+                leading-tight
+                tracking-tight
+                text-slate-900
+                dark:text-white
+                sm:text-5xl
+                lg:text-6xl
+              "
+            >
+              Hi, I'm{" "}
+              <span className="text-blue-600 dark:text-blue-400">
+                <Typewriter
+                  text={profile?.name || "Muhammad Talha"}
+                  speed={100}
+                  delay={300}
+                />
+              </span>
+            </h1>
+
+            <div
+              className="
+                mt-5
+                min-h-[45px]
+                text-2xl
+                font-semibold
+                text-slate-700
+                dark:text-slate-300
+                sm:text-3xl
+              "
+            >
+              <Typewriter
+                text={
+                  profile?.title ||
+                  "Frontend Developer"
+                }
+                speed={70}
+                delay={1500}
+              />
+            </div>
+
+            <p
+              className="
+                mt-6
+                max-w-2xl
+                text-base
+                leading-8
+                text-slate-600
+                dark:text-slate-400
+                sm:text-lg
+              "
+            >
+              {profile?.summary ||
+                "I build modern, responsive and user-friendly web applications using modern frontend technologies."}
+            </p>
+
+            {profile?.location && (
+              <div
+                className="
+                  mt-5
+                  flex
+                  items-center
+                  gap-2
+                  text-sm
+                  font-medium
+                  text-slate-500
+                  dark:text-slate-400
+                "
+              >
+                <span aria-hidden="true">📍</span>
+                <span>{profile.location}</span>
+              </div>
+            )}
+
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href="#projects"
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-xl
+                  bg-blue-600
+                  px-6
+                  py-3
+                  font-semibold
+                  text-white
+                  shadow-lg
+                  transition-all
+                  hover:-translate-y-1
+                  hover:bg-blue-700
+                "
+              >
+                View Projects
+                <span aria-hidden="true">↗</span>
+              </a>
+
+              <a
+                href="#contact"
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-xl
+                  border
+                  border-slate-300
+                  bg-white
+                  px-6
+                  py-3
+                  font-semibold
+                  text-slate-800
+                  transition-all
+                  hover:-translate-y-1
+                  hover:border-blue-400
+                  hover:text-blue-600
+                  dark:border-slate-700
+                  dark:bg-slate-900
+                  dark:text-slate-200
+                  dark:hover:border-blue-500
+                  dark:hover:text-blue-400
+                "
+              >
+                Contact Me
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <div
+              className="
+                mt-8
+                flex
+                flex-wrap
+                gap-x-6
+                gap-y-3
+                text-sm
+                text-slate-500
+                dark:text-slate-400
+              "
+            >
+              {profile?.email && (
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  {profile.email}
+                </a>
+              )}
+
+              {profile?.phone && (
+                <a
+                  href={`tel:${profile.phone}`}
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  {profile.phone}
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Desktop Profile */}
+          <div className="flex justify-center lg:justify-end">
+            <div
+              className="animate-fade-in transition-transform duration-300"
+              style={{
+                transform: `translate(
+                  ${mousePosition.x}px,
+                  ${mousePosition.y}px
+                )`,
+              }}
+            >
+              <div
+                className="
+                  relative
+                  h-80
+                  w-80
+                  rounded-full
+                  border-8
+                  border-white
+                  bg-slate-200
+                  p-2
+                  shadow-2xl
+                  dark:border-slate-800
+                  dark:bg-slate-800
+                "
+              >
+                <img
+                  src={profileImage}
+                  alt={
+                    profile?.name
+                      ? `${profile.name} profile photo`
+                      : "Profile photo"
+                  }
+                  className="
+                    h-full
+                    w-full
+                    rounded-full
+                    object-cover
+                  "
+                />
+
+                <div
+                  className="
+                    absolute
+                    -bottom-3
+                    -right-3
+                    flex
+                    items-center
+                    gap-2
+                    rounded-2xl
+                    bg-blue-600
+                    px-4
+                    py-2
+                    text-sm
+                    font-bold
+                    text-white
+                    shadow-lg
+                  "
+                >
+                  <span
+                    className="h-2 w-2 rounded-full bg-green-400"
+                    aria-hidden="true"
+                  />
+                  Available
+                </div>
+
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    -inset-4
+                    -z-10
+                    rounded-full
+                    border
+                    border-blue-500/20
+                  "
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div
+        className="
+          absolute
+          bottom-6
+          left-1/2
+          hidden
+          -translate-x-1/2
+          flex-col
+          items-center
+          gap-2
+          text-xs
+          font-medium
+          text-slate-400
+          dark:text-slate-500
+          md:flex
+        "
+      >
+        <span>Scroll Down</span>
+        <span
+          className="animate-bounce text-lg"
+          aria-hidden="true"
+        >
+          ↓
+        </span>
       </div>
     </section>
   );
